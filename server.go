@@ -19,7 +19,7 @@ var upgrader = websocket.Upgrader{
 type Server struct {
 	Ip        string
 	Port      int
-	OnlineMap map[string]*User
+	OnlineMap map[string]*Client
 	mapLock   sync.RWMutex
 	Message   chan string
 }
@@ -28,7 +28,7 @@ func NewServer(ip string, port int) *Server {
 	return &Server{
 		Ip:        ip,
 		Port:      port,
-		OnlineMap: make(map[string]*User),
+		OnlineMap: make(map[string]*Client),
 		Message:   make(chan string, 64),
 	}
 }
@@ -48,7 +48,7 @@ func (s *Server) ListenMessage() {
 	}
 }
 
-func (s *Server) BroadCast(user *User, msg string) {
+func (s *Server) BroadCast(user *Client, msg string) {
 	sendMsg := "[" + user.Addr + "]" + user.Name + ":" + msg
 	s.Message <- sendMsg
 }
@@ -62,7 +62,7 @@ func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	user := NewUser(conn, s)
+	user := NewClient(conn, s)
 	user.Online()
 	defer user.Offline()
 
