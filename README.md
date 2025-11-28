@@ -65,12 +65,14 @@ wscat -c ws://localhost:8081/ws
 | `rename`|新名字 | 修改自己的用户名（不能重复） |
 | `to`|用户名|消息 | 向指定用户发送私聊消息 |
 | `任意其他文本` | 广播给所有在线用户 |
-```
+
 ## ⚙️ 代码结构
+```
 ├── main.go          # 服务器入口
 ├── client.go        # Client 结构与方法（上线/下线/消息处理）
 └── server.go        # Server 结构、广播逻辑与 WebSocket 路由
 ```
+
 ## 🔒 注意事项
 - **当前允许所有跨域请求（CheckOrigin: true），生产环境请限制来源。**
 - **用户名默认为 IP:Port，可通过 rename|xxx 修改。**
